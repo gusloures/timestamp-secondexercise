@@ -10,9 +10,12 @@ Second exercise for Timestamp - Doors Challenge
 
 Second exercise for Timestamp to find combinations of door numbers for three buildings based on specific rules and calculates the maximum number of possible combinations.
 
-Rule 1: The first building's door numbers must be odd.
-Rule 2: The second building's door numbers must be prime.
-Rule 3: The third building's door numbers must be divisible by 5.
+Rule 1: The first building's door numbers must be odd.  
+
+Rule 2: The second building's door numbers must be prime.  
+
+Rule 3: The third building's door numbers must be divisible by 5.  
+
 The application is ensuring unique door numbers for each building, preventing duplication among the door numbers assigned to different buildings.
 
 Commits use the https://gitmoji.dev/ approach.
