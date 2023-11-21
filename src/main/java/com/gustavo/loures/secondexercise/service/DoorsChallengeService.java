@@ -11,11 +11,11 @@ public class DoorsChallengeService {
     public List<String> calculateCombinations(int number) {
         return IntStream.rangeClosed(1, number)
                 .boxed()
-                .flatMap(i -> IntStream.rangeClosed(1, number)
+                    .flatMap(fireDeptNumber -> IntStream.rangeClosed(1, number)
                         .boxed()
-                        .flatMap(j -> IntStream.rangeClosed(1, number)
-                                .filter(k -> meetsRules(i, j, k))
-                                .mapToObj(k -> formatCombination(i, j, k))
+                        .flatMap(postOfficeNumber -> IntStream.rangeClosed(1, number)
+                                .filter(barbershopNumber -> checkRules(fireDeptNumber, postOfficeNumber, barbershopNumber))
+                                .mapToObj(barbershopNumber -> formatCombination(fireDeptNumber, postOfficeNumber, barbershopNumber))
                         )
                 )
                 .toList();
@@ -23,11 +23,12 @@ public class DoorsChallengeService {
 
     public boolean isPrime(int num) {
         // Less than or equal to 1 are not prime.
-        if (num <= 1) {
-            return false;
-        }
-        // Checking divisibility up to the square root: if divisible, it's not prime.
-        for (int i = 2; i <= Math.sqrt(num); i++) {
+        if (num <= 1) return false;
+        // 2 is the only even prime number
+        if (num == 2) return true;
+        if ((num % 2) == 0) return false;
+        // Checking divisibility up to the square root, skipping even numbers, if divisible, it's not prime.
+        for (var i = 3; i <= Math.sqrt(num); i += 2) {
             if (num % i == 0) {
                 return false;
             }
@@ -35,23 +36,28 @@ public class DoorsChallengeService {
         return true;
     }
 
-    private boolean meetsRules(int i, int j, int k) {
-        // Rule 1: Numbers of the first building's door should be odd.
-        boolean rule1 = i % 2 != 0;
-
-        // Rule 2: Numbers of the second building's door should be primes.
-        boolean rule2 = isPrime(j);
-
-        // Rule 3: Numbers of the third building's door should be divisible by 5.
-        boolean rule3 = k % 5 == 0;
-
+    private boolean checkRules(int fireDeptNumber, int postOfficeNumber, int barbershopNumber) {
         // Ensuring uniqueness among the door numbers for each building.
-        boolean different = i != j && j != k && k != i;
-
-        return rule1 && rule2 && rule3 && different;
+        if(fireDeptNumber == postOfficeNumber || postOfficeNumber == barbershopNumber || barbershopNumber == fireDeptNumber){
+            return false;
+        }
+        // Rule 1: Numbers of the first building's door should be odd.
+        if (fireDeptNumber % 2 == 0) {
+            return false;
+        }
+        // Rule 2: Numbers of the second building's door should be primes.
+        if (!isPrime(postOfficeNumber)) {
+            return false;
+        }
+        // Rule 3: Numbers of the third building's door should be divisible by 5.
+        if (barbershopNumber % 5 != 0) {
+            return false;
+        }
+        return true;
     }
 
-    private String formatCombination(int i, int j, int k) {
-        return "Bombeiros=" + i + " Correios=" + j + " Barbeiro=" + k;
+
+    private String formatCombination(int fireDeptNumber, int postOfficeNumber, int barbershopNumber) {
+        return "Bombeiros=" + fireDeptNumber + " Correios=" + postOfficeNumber + " Barbeiro=" + barbershopNumber;
     }
 }
